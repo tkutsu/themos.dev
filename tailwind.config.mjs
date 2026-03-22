@@ -14,6 +14,10 @@ export default {
         dim: 'var(--dim)',
         line: 'var(--border)',
         cursor: 'var(--cursor)',
+        card: 'var(--card-bg)',
+      },
+      boxShadow: {
+        card: '0 1px 3px rgba(0,0,0,0.04)',
       },
       keyframes: {
         blink: {

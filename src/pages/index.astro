@@ -19,38 +19,39 @@ const links = [
     <svg class="block dark:hidden" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
   </button>
 
-  <main class="max-w-[480px] mx-auto px-6 pt-[22vh] pb-16">
+  <main class="min-h-dvh flex items-center justify-center px-4 py-16">
+    <div class="w-full max-w-[480px] sm:bg-card sm:shadow-card sm:rounded-md sm:px-10 sm:py-12 px-6 flex flex-col justify-between">
 
-    <!-- Console typing line -->
-    <div class="flex items-center text-[0.9375rem] leading-normal mb-8 min-h-[1.5em]">
-      <span class="text-dim mr-2 select-none">$</span>
-      <span id="typed"></span><span class="inline-block w-[0.55em] h-[1.15em] bg-cursor align-text-bottom ml-px animate-blink transition-colors duration-300"></span>
-    </div>
+      <!-- Console typing line -->
+      <div class="flex items-center text-[0.9375rem] leading-normal mb-8 min-h-[1.5em]">
+        <span class="text-dim mr-2 select-none">$</span>
+        <span id="typed"></span><span class="inline-block w-[0.55em] h-[1.15em] bg-cursor align-text-bottom ml-px animate-blink transition-colors duration-300"></span>
+      </div>
 
-    <!-- About -->
-    <div class="section opacity-0 translate-y-1.5 transition-all duration-[400ms] ease-out mb-8" id="s-about">
-      <p class="font-body text-[0.9375rem] leading-[1.75] opacity-80">
-        I build things on the web.
-      </p>
-    </div>
+      <!-- About -->
+      <div class="section opacity-0 translate-y-1.5 transition-all duration-[400ms] ease-out mb-8" id="s-about">
+        <p class="font-body text-[0.9375rem] leading-[1.75] opacity-80">
+          I build things on the web.
+        </p>
+      </div>
 
-    <!-- Connect -->
-    <div class="section opacity-0 translate-y-1.5 transition-all duration-[400ms] ease-out mb-8" id="s-connect">
-      <div class="flex gap-5 flex-wrap">
-        {links.map((link) => (
-          <a
-            href={link.href}
-            target={link.href.startsWith('mailto') ? undefined : '_blank'}
-            rel={link.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
-            class="text-[0.8125rem] text-dim no-underline transition-colors duration-200 hover:text-primary group"
-          >
-            {link.label}
-            <span class="inline-block text-[0.7em] opacity-0 -translate-x-[3px] transition-all duration-200 group-hover:opacity-50 group-hover:translate-x-0">↗</span>
-          </a>
-        ))}
+      <!-- Connect -->
+      <div class="section opacity-0 translate-y-1.5 transition-all duration-[400ms] ease-out mb-8" id="s-connect">
+        <div class="flex gap-5 flex-wrap">
+          {links.map((link) => (
+            <a
+              href={link.href}
+              target={link.href.startsWith('mailto') ? undefined : '_blank'}
+              rel={link.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
+              class="text-[0.8125rem] text-dim no-underline transition-colors duration-200 hover:text-primary group"
+            >
+              {link.label}
+              <span class="inline-block text-[0.7em] opacity-0 -translate-x-[3px] transition-all duration-200 group-hover:opacity-50 group-hover:translate-x-0">↗</span>
+            </a>
+          ))}
+        </div>
       </div>
     </div>
-
   </main>
 </Base>
 
