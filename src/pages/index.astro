@@ -3,13 +3,47 @@ import Base from '../layouts/Base.astro';
 
 const sections = [
   {
+    dir: '~/srv',
+    items: [
+      {
+        name: 'summit.gr',
+        href: 'https://summit.gr',
+        tag: 'Next.js + Strapi',
+        desc: 'Team building and training company. Catalogue, search, registrations and online payments, self-hosted on Docker Swarm.',
+      },
+      {
+        name: 'old.summit.gr',
+        href: 'https://old.summit.gr',
+        tag: 'Gatsby + Netlify CMS',
+        desc: 'The previous summit.gr, built to replace the original WordPress site. Still up.',
+      },
+      {
+        name: 'partyquest.gr',
+        href: 'https://partyquest.gr',
+        tag: 'Astro + Decap CMS',
+        desc: 'Adventure and quiz games for kids parties, with a catalogue the staff update themselves.',
+      },
+    ],
+  },
+  {
+    dir: '~/games',
+    items: [
+      {
+        name: 'Silhouetto',
+        href: 'https://silhouetto.themos.dev',
+        tag: 'React Three Fiber',
+        desc: 'Rotate a 3D shape until its shadow fits the outline on the wall. Endless generated puzzles, and every URL shares its exact shape.',
+      },
+    ],
+  },
+  {
     dir: '~/datavis',
     items: [
       {
         name: 'EU beaches',
         href: 'https://beaches.themos.dev',
-        tag: 'EEA + Open-Meteo',
-        desc: 'Finding the perfect beach: water temperature, waves, and quality ratings for 26,199 bathing waters back to 1990.',
+        tag: 'EEA + OSM + Open-Meteo + Wikimedia',
+        desc: 'Finding the perfect beach among 26,199 bathing waters rated back to 1990. Each one has its sea temperature and waves right now, sand or pebbles, a photo, and whether there is a lifeguard, food, toilets, showers or parking within a short walk.',
       },
       {
         name: 'EU bird radar',
@@ -34,40 +68,6 @@ const sections = [
         href: 'https://bus.themos.dev',
         tag: 'OASA Telematics + GTFS',
         desc: 'The Athens bus with better UX, so my wife knows when hers is actually coming.',
-      },
-    ],
-  },
-  {
-    dir: '~/games',
-    items: [
-      {
-        name: 'Bloxorz',
-        href: 'https://bloxorz.themos.dev',
-        tag: 'WebGL',
-        desc: 'Bloxorz in WebGL, with procedurally generated levels.',
-      },
-    ],
-  },
-  {
-    dir: '~/srv',
-    items: [
-      {
-        name: 'summit.gr',
-        href: 'https://summit.gr',
-        tag: 'Next.js + Strapi',
-        desc: 'Team building and training company. Catalogue, search, registrations and online payments, self-hosted on Docker Swarm.',
-      },
-      {
-        name: 'old.summit.gr',
-        href: 'https://old.summit.gr',
-        tag: 'Gatsby + Netlify CMS',
-        desc: 'The previous summit.gr, built to replace the original WordPress site. Still up.',
-      },
-      {
-        name: 'partyquest.gr',
-        href: 'https://partyquest.gr',
-        tag: 'Astro + Decap CMS',
-        desc: 'Adventure and quiz games for kids parties, with a catalogue the staff update themselves.',
       },
     ],
   },
@@ -96,7 +96,7 @@ const links = [
   <!-- Theme toggle -->
   <button
     id="toggle"
-    class="fixed top-5 right-5 w-[30px] h-[30px] flex items-center justify-center cursor-pointer transition-colors duration-200 hover:border-dim hover:text-primary"
+    class="absolute sm:fixed top-5 right-5 z-20 w-[30px] h-[30px] flex items-center justify-center cursor-pointer transition-colors duration-200 hover:border-dim hover:text-primary"
     aria-label="Toggle theme"
   >
     <svg class="hidden dark:block" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
@@ -128,12 +128,22 @@ const links = [
       </div>
 
       <!-- projects -->
-      <section class="projects -mx-3 min-h-0 sm:max-h-[380px] sm:overflow-y-auto">
+      <section class="projects relative -mx-3 min-h-0 sm:max-h-[420px] sm:overflow-y-auto">
         {sections.map((section, s) => (
-          <div class={s > 0 ? 'mt-6' : ''}>
-            <p class="reveal px-3 text-dim text-[0.8125rem] select-none mb-2" style={`--d: ${0.1 + s * 0.15}s`}>
-              $ ls {section.dir}
-            </p>
+          <Fragment>
+            <span data-anchor class={s > 0 ? 'block pt-4' : 'block'}></span>
+            <button
+              type="button"
+              data-section
+              class:list={[
+                'reveal sticky z-10 flex w-full h-8 items-center px-3 bg-page sm:bg-card text-[0.8125rem] select-none cursor-pointer group/head',
+                s === 0 && "before:content-[''] before:absolute before:inset-x-0 before:bottom-full before:h-6 before:bg-page sm:before:bg-card",
+              ]}
+              style={`top: calc(${s} * (2rem - 1px)); bottom: calc(${sections.length - 1 - s} * (2rem - 1px)); --d: ${0.1 + s * 0.15}s`}
+            >
+              <span class="text-dim transition-colors duration-300 group-hover/head:text-primary">$ ls {section.dir}</span>
+              <span class="ml-auto text-[0.7rem] text-dim opacity-60">{section.items.length}</span>
+            </button>
             {section.items.map((project, i) => (
               <a
                 href={project.href}
@@ -154,7 +164,7 @@ const links = [
                 </span>
               </a>
             ))}
-          </div>
+          </Fragment>
         ))}
       </section>
     </div>
@@ -186,7 +196,6 @@ const links = [
     .projects {
       scrollbar-width: thin;
       scrollbar-color: var(--border) transparent;
-      mask-image: linear-gradient(to bottom, black calc(100% - 32px), transparent);
     }
     .projects::-webkit-scrollbar {
       width: 4px;
@@ -194,9 +203,6 @@ const links = [
     .projects::-webkit-scrollbar-thumb {
       background: var(--border);
       border-radius: 2px;
-    }
-    .projects.at-end {
-      mask-image: none;
     }
   }
 </style>
@@ -235,12 +241,24 @@ const links = [
     setTimeout(type, 500);
   }
 
-  // Hide the bottom fade once the list is scrolled to its end
-  const list = document.querySelector('.projects')!;
-  const updateFade = () =>
-    list.classList.toggle('at-end', list.scrollTop + list.clientHeight >= list.scrollHeight - 4);
-  list.addEventListener('scroll', updateFade, { passive: true });
-  updateFade();
+  // Sticky section headers: click to scroll to that section
+  const list = document.querySelector<HTMLElement>('.projects')!;
+  const heads = [...list.querySelectorAll<HTMLButtonElement>('[data-section]')];
+  const anchors = [...list.querySelectorAll<HTMLElement>('[data-anchor]')];
+
+  heads.forEach((head, j) =>
+    head.addEventListener('click', () => {
+      const behavior = reduced ? 'auto' : 'smooth';
+      const stacked = j * (head.offsetHeight - 1);
+      if (getComputedStyle(list).overflowY !== 'visible') {
+        const top = anchors[j].offsetTop + anchors[j].offsetHeight - stacked;
+        list.scrollTo({ top: Math.min(top, list.scrollHeight - list.clientHeight), behavior });
+      } else {
+        const top = scrollY + anchors[j].getBoundingClientRect().bottom - stacked;
+        scrollTo({ top: Math.min(top, document.documentElement.scrollHeight - innerHeight), behavior });
+      }
+    })
+  );
 
   // Parallax tilt on the card (pointer devices, full motion only)
   if (!reduced && matchMedia('(hover: hover)').matches) {
