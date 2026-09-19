@@ -8,18 +8,21 @@ const sections = [
       {
         name: 'summit.gr',
         href: 'https://summit.gr',
+        thumb: '/thumbs/summit.webp',
         tag: 'Next.js + Strapi',
         desc: 'Team building and training company. Catalogue, search, registrations and online payments, self-hosted on Docker Swarm.',
       },
       {
         name: 'old.summit.gr',
         href: 'https://old.summit.gr',
+        thumb: '/thumbs/old-summit.webp',
         tag: 'Gatsby + Netlify CMS',
         desc: 'The previous summit.gr, built to replace the original WordPress site. Still up.',
       },
       {
         name: 'partyquest.gr',
         href: 'https://partyquest.gr',
+        thumb: '/thumbs/partyquest.webp',
         tag: 'Astro + Decap CMS',
         desc: 'Adventure and quiz games for kids parties, with a catalogue the staff update themselves.',
       },
@@ -31,6 +34,7 @@ const sections = [
       {
         name: 'Silhouetto',
         href: 'https://silhouetto.themos.dev',
+        thumb: '/thumbs/silhouetto.webp',
         tag: 'React Three Fiber',
         desc: 'Rotate a 3D shape until its shadow fits the outline on the wall. Endless generated puzzles, and every URL shares its exact shape.',
       },
@@ -42,30 +46,35 @@ const sections = [
       {
         name: 'EU beaches',
         href: 'https://beaches.themos.dev',
-        tag: 'EEA + OSM + Open-Meteo + Wikimedia',
-        desc: 'Finding the perfect beach among 26,199 bathing waters rated back to 1990. Each one has its sea temperature and waves right now, sand or pebbles, a photo, and whether there is a lifeguard, food, toilets, showers or parking within a short walk.',
+        thumb: '/thumbs/beaches.webp',
+        tag: 'EEA + OSM + Open-Meteo',
+        desc: 'Finding the perfect beach among 26,199 bathing waters rated back to 1990, with sea temperature, waves and amenities for each.',
       },
       {
         name: 'EU bird radar',
         href: 'https://birds.themos.dev',
+        thumb: '/thumbs/birds.webp',
         tag: 'Aloft',
         desc: 'The flight paths of birds migrating over Europe at night, drawn from weather radar. Fun to watch.',
       },
       {
         name: 'EU food prices',
         href: 'https://food.themos.dev',
+        thumb: '/thumbs/food.webp',
         tag: 'EC Agri-food + Eurostat',
         desc: 'Comparing actual food prices across the EU, in euro or in hours of work.',
       },
       {
         name: 'GR wildfires',
         href: 'https://wildfires.themos.dev',
+        thumb: '/thumbs/wildfires.webp',
         tag: 'Copernicus EFFIS',
         desc: 'A live map of fires in Greece: what is burning today, what the season has taken, and the fire danger for tomorrow.',
       },
       {
         name: 'Athens bus stops',
         href: 'https://bus.themos.dev',
+        thumb: '/thumbs/bus.webp',
         tag: 'OASA Telematics + GTFS',
         desc: 'The Athens bus with better UX, so my wife knows when hers is actually coming.',
       },
@@ -107,7 +116,7 @@ const links = [
     <div id="card" class="w-full max-w-[540px] sm:bg-card sm:shadow-card sm:rounded-sm sm:px-10 sm:py-12 px-6 flex flex-col gap-9">
 
       <!-- console typing line -->
-      <div class="flex items-center justify-between text-[0.9375rem] leading-normal min-h-[1.5em]">
+      <div class="flex items-center justify-between text-[1.125rem] leading-normal min-h-[1.5em]">
         <div class="flex items-center">
           <span id="title"></span>
           <span class="inline-block w-[0.55em] h-[1.15em] bg-cursor align-text-bottom ml-px animate-blink transition-colors duration-300"></span>
@@ -149,10 +158,22 @@ const links = [
                 href={project.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="reveal group block px-3 py-2.5 rounded-sm"
+                class="reveal group flex gap-3 sm:gap-4 px-3 py-2.5 rounded-sm"
                 style={`--d: ${Math.min(0.2 + s * 0.15 + i * 0.08, 0.9)}s`}
               >
-                <span class="flex items-center justify-between text-[0.9375rem]">
+                <span class="shrink-0 mt-1 w-14 h-[35px] sm:w-[72px] sm:h-[45px] overflow-hidden rounded-sm ring-1 ring-line">
+                  <img
+                    src={project.thumb}
+                    alt=""
+                    width="72"
+                    height="45"
+                    loading="lazy"
+                    decoding="async"
+                    class="w-full h-full object-cover object-top saturate-[.55] opacity-90 transition duration-500 ease-out-soft group-hover:saturate-100 group-hover:opacity-100 group-hover:scale-105 dark:opacity-70 dark:group-hover:opacity-100"
+                  />
+                </span>
+                <span class="block min-w-0 flex-1">
+                <span class="flex flex-wrap items-center justify-between gap-x-3 text-[0.9375rem]">
                   <span class="flex items-center gap-1.5 transition-transform duration-300 ease-out-soft group-hover:translate-x-1">
                     {project.name}
                     <svg class="opacity-0 -translate-x-1 transition-all duration-300 ease-out-soft group-hover:opacity-100 group-hover:translate-x-0 text-dim" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>
@@ -161,6 +182,7 @@ const links = [
                 </span>
                 <span class="block font-body text-[0.84rem] leading-[1.65] text-dim transition-colors duration-300 group-hover:text-primary">
                   {project.desc}
+                </span>
                 </span>
               </a>
             ))}
@@ -245,14 +267,48 @@ const links = [
   const list = document.querySelector<HTMLElement>('.projects')!;
   const heads = [...list.querySelectorAll<HTMLButtonElement>('[data-section]')];
   const anchors = [...list.querySelectorAll<HTMLElement>('[data-anchor]')];
+  const tilts = !reduced && matchMedia('(hover: hover)').matches;
+  const listScrolls = () => getComputedStyle(list).overflowY !== 'visible';
+
+  // Under the 3D tilt, native list scrolling runs ahead of the sticky headers and rows peek out above them,
+  // so wheel and header scrolling set scrollTop from here instead.
+  let listTarget = 0, listPos = 0, listRaf = 0;
+
+  function glideList() {
+    listPos += (listTarget - listPos) * 0.18;
+    if (Math.abs(listTarget - listPos) < 0.5) listPos = listTarget;
+    list.scrollTop = listPos;
+    listRaf = listPos === listTarget ? 0 : requestAnimationFrame(glideList);
+  }
+
+  function scrollListTo(top: number) {
+    listTarget = Math.max(0, Math.min(list.scrollHeight - list.clientHeight, top));
+    if (!listRaf) {
+      listPos = list.scrollTop;
+      listRaf = requestAnimationFrame(glideList);
+    }
+  }
+
+  if (tilts) {
+    list.addEventListener('wheel', (e) => {
+      if (e.ctrlKey || !listScrolls()) return;
+      const delta = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? list.clientHeight : 1);
+      const from = listRaf ? listTarget : list.scrollTop;
+      const max = list.scrollHeight - list.clientHeight;
+      if (!delta || (delta < 0 && from <= 0) || (delta > 0 && from >= max)) return;
+      e.preventDefault();
+      scrollListTo(from + delta);
+    }, { passive: false });
+  }
 
   heads.forEach((head, j) =>
     head.addEventListener('click', () => {
       const behavior = reduced ? 'auto' : 'smooth';
       const stacked = j * (head.offsetHeight - 1);
-      if (getComputedStyle(list).overflowY !== 'visible') {
+      if (listScrolls()) {
         const top = anchors[j].offsetTop + anchors[j].offsetHeight - stacked;
-        list.scrollTo({ top: Math.min(top, list.scrollHeight - list.clientHeight), behavior });
+        if (tilts) scrollListTo(top);
+        else list.scrollTo({ top: Math.min(top, list.scrollHeight - list.clientHeight), behavior });
       } else {
         const top = scrollY + anchors[j].getBoundingClientRect().bottom - stacked;
         scrollTo({ top: Math.min(top, document.documentElement.scrollHeight - innerHeight), behavior });
@@ -261,7 +317,7 @@ const links = [
   );
 
   // Parallax tilt on the card (pointer devices, full motion only)
-  if (!reduced && matchMedia('(hover: hover)').matches) {
+  if (tilts) {
     let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
 
     function damp() {
