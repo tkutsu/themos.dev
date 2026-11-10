@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 
+const description = 'A smörgåsbord of web apps and Linux tøøls.';
+
 const sections = [
   {
     dir: '~/tools',
@@ -125,7 +127,7 @@ const links = [
   ];
 ---
 
-<Base>
+<Base description={description}>
   <!-- Theme toggle -->
   <button
     id="toggle"
@@ -139,7 +141,8 @@ const links = [
   <main class="min-h-dvh flex items-center justify-center px-4 py-16">
     <div id="card" class="w-full max-w-[540px] sm:bg-card sm:shadow-card sm:rounded-sm sm:px-10 sm:py-12 px-6 flex flex-col gap-9">
 
-      <!-- console typing line -->
+      <!-- console typing line, with the site description under it -->
+      <header class="flex flex-col gap-1.5">
       <div class="flex items-center justify-between text-[1.125rem] leading-normal min-h-[1.5em]">
         <div class="flex items-center">
           <span id="title"></span>
@@ -159,9 +162,11 @@ const links = [
           ))}
         </div>
       </div>
+      <p class="reveal text-[0.8125rem] text-dim" style="--d: 0.3s">{description}</p>
+      </header>
 
       <!-- projects -->
-      <section class="projects relative -mx-3 min-h-0 sm:max-h-[420px] sm:overflow-y-auto">
+      <section class="projects relative -mx-3 min-h-0 sm:max-h-[540px] sm:overflow-y-auto">
         {sections.map((section, s) => (
           <Fragment>
             <span data-anchor class={s > 0 ? 'block pt-4' : 'block'}></span>
@@ -170,6 +175,8 @@ const links = [
               data-section
               class:list={[
                 'reveal sticky z-10 flex w-full h-8 items-center px-3 bg-page sm:bg-card text-[0.8125rem] select-none cursor-pointer group/head',
+                // A 1px edge in the background colour above and below, so no sliver of a row shows between stacked headers.
+                'shadow-[0_1px_0_var(--bg),0_-1px_0_var(--bg)] sm:shadow-[0_1px_0_var(--card-bg),0_-1px_0_var(--card-bg)]',
                 s === 0 && "before:content-[''] before:absolute before:inset-x-0 before:bottom-full before:h-6 before:bg-page sm:before:bg-card",
               ]}
               style={`top: calc(${s} * (2rem - 1px)); bottom: calc(${sections.length - 1 - s} * (2rem - 1px)); --d: ${0.1 + s * 0.15}s`}
@@ -182,8 +189,9 @@ const links = [
                 href={project.href}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-item={s}
                 class="reveal group flex flex-col gap-1.5 px-3 py-2.5 rounded-sm"
-                style={`--d: ${Math.min(0.2 + s * 0.15 + i * 0.08, 0.9)}s`}
+                style={`--d: ${Math.min(0.2 + s * 0.15 + i * 0.08, 0.9)}s; scroll-margin-top: calc(${s} * (2rem - 1px) + 2rem)`}
               >
                 <span class="flex items-center gap-3 sm:gap-4">
                   <span class="shrink-0 w-14 h-[35px] sm:w-[72px] sm:h-[45px] overflow-hidden rounded-sm ring-1 ring-line">
@@ -230,12 +238,37 @@ const links = [
     opacity: 1;
     transform: none;
   }
+  /* Rows only show once they are fully in view, so none sits half-cut against a header.
+     The row itself only fades: scroll-snap measures transformed boxes, so the movement goes on its children. */
+  .revealed .reveal.out {
+    opacity: 0;
+  }
+  [data-item] > * {
+    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .revealed .reveal.out > * {
+    transform: translateY(10px) scale(0.98);
+  }
+  /* After the opening stagger, rows pop in and out without waiting for it. */
+  .settled .reveal {
+    transition-delay: 0s;
+  }
   @media (prefers-reduced-motion: reduce) {
-    .reveal {
+    .reveal,
+    .revealed .reveal.out,
+    .revealed .reveal.out > * {
       transition: none;
       transform: none;
       opacity: 1;
     }
+  }
+
+  /* Without the tilt, the browser snaps the list one row at a time. */
+  .projects.snap {
+    scroll-snap-type: y mandatory;
+  }
+  .projects.snap > [data-item] {
+    scroll-snap-align: start;
   }
 
   @media (min-width: 640px) {
@@ -263,7 +296,7 @@ const links = [
     );
   });
 
-  // Block-cursor typer, then staggered reveal
+  // Block-cursor typer, with the staggered reveal running alongside it
   const text = 'themos.dev';
   const el = document.getElementById('title')!;
   const card = document.getElementById('card')!;
@@ -273,18 +306,25 @@ const links = [
     if (i < text.length) {
       el.textContent += text[i++];
       setTimeout(type, 80 + Math.random() * 50);
-    } else {
-      setTimeout(() => card.classList.add('revealed'), 200);
     }
+  }
+
+  function reveal() {
+    card.classList.add('revealed');
+    // The longest stagger is 0.9s plus a 0.7s transition; after that, rows pop without delay.
+    setTimeout(() => card.classList.add('settled'), 1700);
   }
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (reduced) {
     el.textContent = text;
-    card.classList.add('revealed');
+    reveal();
   } else {
-    setTimeout(type, 500);
+    setTimeout(() => {
+      type();
+      reveal();
+    }, 500);
   }
 
   // Sticky section headers: click to scroll to that section
@@ -313,17 +353,61 @@ const links = [
     }
   }
 
-  if (tilts) {
-    list.addEventListener('wheel', (e) => {
-      if (e.ctrlKey || !listScrolls()) return;
-      const delta = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? list.clientHeight : 1);
-      const from = listRaf ? listTarget : list.scrollTop;
-      const max = list.scrollHeight - list.clientHeight;
-      if (!delta || (delta < 0 && from <= 0) || (delta > 0 && from >= max)) return;
-      e.preventDefault();
-      scrollListTo(from + delta);
-    }, { passive: false });
+  // Discrete scrolling: each wheel gesture moves the list by one row, lining it up under its section header.
+  const items = [...list.querySelectorAll<HTMLElement>('[data-item]')];
+  const headHeight = heads[0].offsetHeight;
+  const rowTop = (item: HTMLElement) => item.offsetTop - (+item.dataset.item! * (headHeight - 1) + headHeight);
+
+  function stepTarget(dir: number) {
+    const max = list.scrollHeight - list.clientHeight;
+    const from = listRaf ? listTarget : list.scrollTop;
+    const stops = [0, ...items.map(rowTop), max].map((t) => Math.max(0, Math.min(max, t)));
+    const next = dir > 0 ? Math.min(...stops.filter((t) => t > from + 2)) : Math.max(...stops.filter((t) => t < from - 2));
+    return Number.isFinite(next) ? next : null;
   }
+
+  if (tilts) {
+    // A trackpad swipe fires a stream of wheel events; one swipe moves one row.
+    let lastEvent = 0, lastStep = 0;
+    list.addEventListener('wheel', (e) => {
+      if (e.ctrlKey || !listScrolls() || !e.deltaY) return;
+      const next = stepTarget(Math.sign(e.deltaY));
+      if (next === null) return;
+      e.preventDefault();
+      const now = performance.now();
+      const fresh = now - lastEvent > 150 || now - lastStep > 450;
+      lastEvent = now;
+      if (!fresh) return;
+      lastStep = now;
+      scrollListTo(next);
+    }, { passive: false });
+  } else {
+    list.classList.add('snap');
+  }
+
+  // Rows pop in once they are fully in view: inside the list (or the window, when the page scrolls) and clear of every stuck header.
+  // Positions come from layout offsets, not rects, so reveal and pop-in transforms can't skew them.
+  // A stuck header's offsetTop already includes its sticky shift.
+  function updateRows() {
+    const rect = list.getBoundingClientRect();
+    const box = listScrolls() ? rect : { top: 0, bottom: innerHeight };
+    const origin = rect.top - list.scrollTop;
+    const covers = heads.map((h) => ({ top: origin + h.offsetTop, bottom: origin + h.offsetTop + h.offsetHeight }));
+    for (const item of items) {
+      const top = origin + item.offsetTop;
+      const bottom = top + item.offsetHeight;
+      const inside = top >= box.top - 2 && bottom <= box.bottom + 2;
+      const covered = covers.some((c) => c.top < bottom - 2 && c.bottom > top + 2);
+      item.classList.toggle('out', !inside || covered);
+    }
+  }
+
+  let rowsRaf = 0;
+  const queueRows = () => { if (!rowsRaf) rowsRaf = requestAnimationFrame(() => { rowsRaf = 0; updateRows(); }); };
+  list.addEventListener('scroll', queueRows, { passive: true });
+  addEventListener('scroll', queueRows, { passive: true });
+  addEventListener('resize', queueRows);
+  updateRows();
 
   heads.forEach((head, j) =>
     head.addEventListener('click', () => {
