@@ -367,19 +367,30 @@ const links = [
   }
 
   if (tilts) {
-    // A trackpad swipe fires a stream of wheel events; one swipe moves one row.
-    let lastEvent = 0, lastStep = 0;
+    // Every mouse notch moves one row, however fast they come. Trackpads send small deltas,
+    // which add up so that each 60px of swipe moves one row.
+    const NOTCH = 40, TRACKPAD_ROW = 60;
+    let pending = 0, lastEvent = 0;
     list.addEventListener('wheel', (e) => {
       if (e.ctrlKey || !listScrolls() || !e.deltaY) return;
-      const next = stepTarget(Math.sign(e.deltaY));
+      const delta = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? list.clientHeight : 1);
+      const dir = Math.sign(delta);
+      const next = stepTarget(dir);
       if (next === null) return;
       e.preventDefault();
       const now = performance.now();
-      const fresh = now - lastEvent > 150 || now - lastStep > 450;
+      if (now - lastEvent > 200 || Math.sign(pending) !== dir) pending = 0;
       lastEvent = now;
-      if (!fresh) return;
-      lastStep = now;
-      scrollListTo(next);
+      if (Math.abs(delta) >= NOTCH) {
+        pending = 0;
+        scrollListTo(next);
+        return;
+      }
+      pending += delta;
+      if (Math.abs(pending) >= TRACKPAD_ROW) {
+        pending = 0;
+        scrollListTo(next);
+      }
     }, { passive: false });
   } else {
     list.classList.add('snap');
