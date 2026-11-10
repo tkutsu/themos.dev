@@ -220,6 +220,7 @@ const links = [
             ))}
           </Fragment>
         ))}
+        <span data-tail aria-hidden="true" class="block"></span>
       </section>
     </div>
   </main>
@@ -358,8 +359,12 @@ const links = [
   const headHeight = heads[0].offsetHeight;
   const rowTop = (item: HTMLElement) => item.offsetTop - (+item.dataset.item! * (headHeight - 1) + headHeight);
 
+  // The furthest the list scrolls: the last header flush under the others (see sizeTail).
+  const tail = list.querySelector<HTMLElement>('[data-tail]')!;
+  let flushTop = Infinity;
+
   function stepTarget(dir: number) {
-    const max = list.scrollHeight - list.clientHeight;
+    const max = Math.min(list.scrollHeight - list.clientHeight, flushTop);
     const from = listRaf ? listTarget : list.scrollTop;
     const stops = [0, ...items.map(rowTop), max].map((t) => Math.max(0, Math.min(max, t)));
     const next = dir > 0 ? Math.min(...stops.filter((t) => t > from + 2)) : Math.max(...stops.filter((t) => t < from - 2));
@@ -418,6 +423,21 @@ const links = [
   list.addEventListener('scroll', queueRows, { passive: true });
   addEventListener('scroll', queueRows, { passive: true });
   addEventListener('resize', queueRows);
+
+  // Room after the last row, so the list can scroll until the last header sits flush under the stacked ones.
+  // The content's end comes from the tail's offset: scrollHeight also counts rows shifted by their pop-in transform.
+  function sizeTail() {
+    if (!listScrolls()) {
+      tail.style.height = '0px';
+      return;
+    }
+    const last = anchors.length - 1;
+    flushTop = anchors[last].offsetTop + anchors[last].offsetHeight - last * (headHeight - 1);
+    tail.style.height = `${Math.max(0, flushTop + list.clientHeight - tail.offsetTop)}px`;
+  }
+  sizeTail();
+  addEventListener('resize', sizeTail);
+  document.fonts.ready.then(sizeTail);
   updateRows();
 
   heads.forEach((head, j) =>
