@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 
-const description = 'A smörgåsbord of web apps and Linux tøøls.';
+const tagline = 'A smörgåsbord of web apps and Linux tøøls.';
 
 const sections = [
   {
@@ -126,11 +126,9 @@ const links = [
       icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>',
     },
   ];
-
-const year = new Date().getFullYear();
 ---
 
-<Base description={description}>
+<Base>
   <!-- Theme toggle -->
   <button
     id="toggle"
@@ -141,16 +139,17 @@ const year = new Date().getFullYear();
     <svg class="block dark:hidden" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
   </button>
 
-  <main class="min-h-dvh flex flex-col items-center justify-center gap-5 px-4 py-16">
+  <!-- Phones start at the top; from 640px up the card is centred in the window. -->
+  <main class="min-h-dvh flex flex-col items-center sm:justify-center px-4 pt-16 pb-10 sm:py-16">
     <div id="card" class="w-full max-w-[440px] px-2 sm:px-6 sm:pt-7 sm:pb-3.5 sm:bg-card sm:rounded-[14px] sm:ring-1 sm:ring-line sm:shadow-card flex flex-col gap-6">
 
       <!-- console typing line, with the site description under it -->
       <header class="flex flex-col gap-1.5">
         <div class="flex items-center justify-between text-[0.9375rem] leading-normal min-h-[1.5em]">
-          <div class="flex items-center">
-            <span id="title"></span>
-            <span class="inline-block w-[0.55em] h-[1.15em] bg-cursor align-text-bottom ml-px animate-blink transition-colors duration-300"></span>
-          </div>
+          <h1 class="flex items-center">
+            <span id="title">themos.dev</span>
+            <span aria-hidden="true" class="inline-block w-[0.55em] h-[1.15em] bg-cursor align-text-bottom ml-px animate-blink transition-colors duration-300"></span>
+          </h1>
           <nav aria-label="Contact" class="reveal flex -mr-2.5" style="--d: 0.5s">
             {links.map((link) => (
               <a
@@ -165,7 +164,7 @@ const year = new Date().getFullYear();
             ))}
           </nav>
         </div>
-        <p class="reveal font-body text-[0.875rem] text-dim" style="--d: 0.3s">{description}</p>
+        <p class="reveal font-body text-[0.875rem] text-dim" style="--d: 0.3s">{tagline}</p>
       </header>
 
       <!-- projects, one tab per section -->
@@ -230,12 +229,15 @@ const year = new Date().getFullYear();
         </div>
       </section>
     </div>
-
-    <p class="reveal text-[0.6875rem] text-dim" style="--d: 0.6s">© {year} Themos Koutsouris</p>
   </main>
 </Base>
 
 <style>
+  /* The title is in the HTML for crawlers and no-JS visitors; with JS it stays hidden until the typer takes over. */
+  :global(html.js) #title:not(.ready) {
+    visibility: hidden;
+  }
+
   .reveal {
     opacity: 0;
     transform: translateY(10px);
@@ -299,8 +301,8 @@ const year = new Date().getFullYear();
   });
 
   // Block-cursor typer, with the staggered reveal running alongside it
-  const text = 'themos.dev';
   const el = document.getElementById('title')!;
+  const text = el.textContent!;
   const card = document.getElementById('card')!;
   const main = card.parentElement!;
   let i = 0;
@@ -320,10 +322,11 @@ const year = new Date().getFullYear();
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  el.classList.add('ready');
   if (reduced) {
-    el.textContent = text;
     reveal();
   } else {
+    el.textContent = '';
     setTimeout(() => {
       type();
       reveal();

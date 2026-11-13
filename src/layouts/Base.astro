@@ -1,6 +1,20 @@
 ---
-interface Props { title?: string; description: string; }
-const { title = 'themos.dev', description } = Astro.props;
+interface Props { title?: string; description?: string; }
+const {
+  title = 'Themos Koutsouris · web apps and Linux tools',
+  description = 'Themos Koutsouris builds web apps and Linux tools: Hyprland utilities, browser games, maps from open data, and sites for clients.',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const image = new URL('/og.png', Astro.site);
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Themos Koutsouris',
+  url: Astro.site,
+  email: 'mailto:me@themos.dev',
+  sameAs: ['https://github.com/tkutsu', 'https://www.linkedin.com/in/themos-koutsouris-63b0a6395'],
+};
 ---
 
 <!doctype html>
@@ -15,7 +29,23 @@ const { title = 'themos.dev', description } = Astro.props;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Outfit:wght@400;500&display=swap" rel="stylesheet" />
     <title>{title}</title>
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="themos.dev" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="The themos.dev card: a list of projects under five tabs." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json" set:html={JSON.stringify(person)} />
+
     <script is:inline>
+      // Lets the page hide the title until the typer starts, so it doesn't flash in full first.
+      document.documentElement.classList.add('js');
       (function(){
         var s = localStorage.getItem('theme');
         if (s === 'dark' || (!s && matchMedia('(prefers-color-scheme: dark)').matches))
