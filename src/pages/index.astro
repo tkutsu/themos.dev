@@ -5,117 +5,104 @@ const description = 'A smörgåsbord of web apps and Linux tøøls.';
 
 const sections = [
   {
-    dir: '~/tools',
+    dir: 'tools',
     items: [
       {
         name: 'wayhint',
         href: 'https://github.com/tkutsu/wayhint',
         thumb: '/thumbs/wayhint.svg',
-        tag: 'Rust + AT-SPI + pixel detection',
         desc: 'Keyboard-driven clicking for Hyprland: hint labels and text search',
       },
       {
         name: 'dewdrop',
         href: 'https://github.com/tkutsu/dewdrop',
         thumb: '/thumbs/dewdrop.svg',
-        tag: 'Quickshell + GLSL shaders',
         desc: 'Liquid glass shell for Hyprland: bar, launcher, notifications, music, timers, phone alarms, weather, feeds, mail, calendar, tasks etc',
       },
       {
         name: 'mousewand',
         href: 'https://github.com/tkutsu/mousewand',
         thumb: '/thumbs/mousewand.svg',
-        tag: 'Rust + evdev + wgpu',
         desc: 'Mouse gestures for every Linux desktop: hold a button, draw a stroke, the window under it acts.',
       },
     ],
   },
   {
-    dir: '~/apps',
+    dir: 'apps',
     items: [
       {
         name: 'My Pocket Bus: Athens',
         href: 'https://bus.themos.dev',
         thumb: '/thumbs/bus.svg',
-        tag: 'OASA Telematics + GTFS',
         desc: 'Web app for nearby Athens bus stops and live arrivals.',
       },
       {
         name: 'Regimen',
         href: 'https://github.com/tkutsu/regimen',
         thumb: '/thumbs/regimen.svg',
-        tag: 'Tauri + React + Syncthing',
         desc: 'Calorie and weigh-in tracker for Linux & Android, synced with Syncthing',
       },
     ],
   },
   {
-    dir: '~/srv',
+    dir: 'srv',
     items: [
       {
         name: 'summit.gr',
         href: 'https://summit.gr',
         thumb: '/thumbs/summit.webp',
-        tag: 'Next.js + Strapi',
         desc: 'Team building and training company. Catalogue, search, registrations and online payments, self-hosted on Docker Swarm.',
       },
       {
         name: 'old.summit.gr',
         href: 'https://old.summit.gr',
         thumb: '/thumbs/old-summit.webp',
-        tag: 'Gatsby + Netlify CMS',
         desc: 'The previous summit.gr, built to replace the original WordPress site. Still up.',
       },
       {
         name: 'partyquest.gr',
         href: 'https://partyquest.gr',
         thumb: '/thumbs/partyquest.webp',
-        tag: 'Astro + Decap CMS',
         desc: "Adventure and quiz games for kids' parties, with a catalogue the staff update themselves.",
       },
     ],
   },
   {
-    dir: '~/games',
+    dir: 'games',
     items: [
       {
         name: 'Silhouetto',
         href: 'https://silhouetto.themos.dev',
         thumb: '/thumbs/silhouetto.webp',
-        tag: 'React Three Fiber',
         desc: 'Rotate a 3D shape until its shadow fits the outline on the wall. Endless generated puzzles, and every URL shares its exact shape.',
       },
       {
         name: 'Bloxorz',
         href: 'https://bloxorz.themos.dev',
         thumb: '/thumbs/bloxorz.webp',
-        tag: 'WebGL2 + BFS level solver',
         desc: 'Bloxorz in WebGL, with procedurally generated levels.',
       },
     ],
   },
   {
-    dir: '~/datavis',
+    dir: 'datavis',
     items: [
       {
         name: 'EU beaches',
         href: 'https://beaches.themos.dev',
         thumb: '/thumbs/beaches.svg',
-        tag: 'EEA + OSM + Open-Meteo',
         desc: 'Finding the perfect beach among 26,199 bathing waters rated back to 1990, with sea temperature, waves and amenities for each.',
       },
       {
         name: 'EU bird radar',
         href: 'https://birds.themos.dev',
         thumb: '/thumbs/birds.svg',
-        tag: 'Aloft',
         desc: 'The flight paths of birds migrating over Europe at night, drawn from weather radar. Fun to watch.',
       },
       {
         name: 'GR wildfires',
         href: 'https://wildfires.themos.dev',
         thumb: '/thumbs/wildfires.svg',
-        tag: 'Copernicus EFFIS',
         desc: 'A live map of fires in Greece: what is burning today, what the season has taken, and the fire danger for tomorrow.',
       },
     ],
@@ -139,104 +126,112 @@ const links = [
       icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>',
     },
   ];
+
+const year = new Date().getFullYear();
 ---
 
 <Base description={description}>
   <!-- Theme toggle -->
   <button
     id="toggle"
-    class="absolute sm:fixed top-5 right-5 z-20 w-[30px] h-[30px] flex items-center justify-center cursor-pointer transition-colors duration-200 hover:border-dim hover:text-primary"
+    class="absolute sm:fixed top-5 right-5 z-20 w-[30px] h-[30px] flex items-center justify-center cursor-pointer text-dim transition-colors duration-200 hover:text-primary"
     aria-label="Toggle theme"
   >
     <svg class="hidden dark:block" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
     <svg class="block dark:hidden" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
   </button>
 
-  <main class="min-h-dvh flex items-center justify-center px-4 py-16">
-    <div id="card" class="w-full max-w-[540px] sm:bg-card sm:shadow-card sm:rounded-sm sm:px-10 sm:py-12 px-6 flex flex-col gap-9">
+  <main class="min-h-dvh flex flex-col items-center justify-center gap-5 px-4 py-16">
+    <div id="card" class="w-full max-w-[440px] px-2 sm:px-6 sm:pt-7 sm:pb-3.5 sm:bg-card sm:rounded-[14px] sm:ring-1 sm:ring-line sm:shadow-card flex flex-col gap-6">
 
       <!-- console typing line, with the site description under it -->
       <header class="flex flex-col gap-1.5">
-      <div class="flex items-center justify-between text-[1.125rem] leading-normal min-h-[1.5em]">
-        <div class="flex items-center">
-          <span id="title"></span>
-          <span class="inline-block w-[0.55em] h-[1.15em] bg-cursor align-text-bottom ml-px animate-blink transition-colors duration-300"></span>
-        </div>
-        <div class="reveal flex gap-4" style="--d: 0.5s">
-          {links.map((link) => (
-            <a
+        <div class="flex items-center justify-between text-[0.9375rem] leading-normal min-h-[1.5em]">
+          <div class="flex items-center">
+            <span id="title"></span>
+            <span class="inline-block w-[0.55em] h-[1.15em] bg-cursor align-text-bottom ml-px animate-blink transition-colors duration-300"></span>
+          </div>
+          <nav aria-label="Contact" class="reveal flex -mr-2.5" style="--d: 0.5s">
+            {links.map((link) => (
+              <a
                 href={link.href}
                 target={link.href.startsWith('mailto') ? undefined : '_blank'}
                 rel={link.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
-                class="text-dim transition-colors duration-200 hover:text-primary"
+                class="w-10 h-10 flex items-center justify-center text-dim transition-colors duration-200 hover:text-primary"
                 aria-label={link.label}
-            >
-              <Fragment set:html={link.icon} />
-            </a>
-          ))}
+              >
+                <Fragment set:html={link.icon} />
+              </a>
+            ))}
+          </nav>
         </div>
-      </div>
-      <p class="reveal text-[0.8125rem] text-dim" style="--d: 0.3s">{description}</p>
+        <p class="reveal font-body text-[0.875rem] text-dim" style="--d: 0.3s">{description}</p>
       </header>
 
-      <!-- projects -->
-      <section class="projects relative -mx-3 min-h-0 sm:max-h-[540px] sm:overflow-y-auto">
-        {sections.map((section, s) => (
-          <Fragment>
-            <span data-anchor class={s > 0 ? 'block pt-4' : 'block'}></span>
+      <!-- projects, one tab per section -->
+      <section class="reveal flex flex-col gap-1.5" style="--d: 0.4s">
+        <div role="tablist" aria-label="Projects" class="relative grid grid-cols-5 border-b border-line">
+          {sections.map((section, s) => (
             <button
               type="button"
-              data-section
-              class:list={[
-                'reveal sticky z-10 flex w-full h-8 items-center px-3 bg-page sm:bg-card text-[0.8125rem] select-none cursor-pointer group/head',
-                // A 1px edge in the background colour above and below, so no sliver of a row shows between stacked headers.
-                'shadow-[0_1px_0_var(--bg),0_-1px_0_var(--bg)] sm:shadow-[0_1px_0_var(--card-bg),0_-1px_0_var(--card-bg)]',
-                s === 0 && "before:content-[''] before:absolute before:inset-x-0 before:bottom-full before:h-6 before:bg-page sm:before:bg-card",
-              ]}
-              style={`top: calc(${s} * (2rem - 1px)); bottom: calc(${sections.length - 1 - s} * (2rem - 1px)); --d: ${0.1 + s * 0.15}s`}
+              role="tab"
+              id={`tab-${section.dir}`}
+              aria-controls={`panel-${section.dir}`}
+              aria-selected={s === 0 ? 'true' : 'false'}
+              tabindex={s === 0 ? 0 : -1}
+              class="h-11 rounded-md text-[0.75rem] text-dim cursor-pointer outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-dim transition-colors duration-200 hover:text-primary aria-selected:text-primary"
             >
-              <span class="text-dim transition-colors duration-300 group-hover/head:text-primary">$ ls {section.dir}</span>
-              <span class="ml-auto text-[0.7rem] text-dim opacity-60">{section.items.length}</span>
+              {section.dir}<sup class="ml-0.5 text-[0.5625rem] opacity-70 max-[359px]:hidden">{section.items.length}</sup>
             </button>
-            {section.items.map((project, i) => (
-              <a
-                href={project.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-item={s}
-                class="reveal group flex flex-col gap-1.5 px-3 py-2.5 rounded-sm"
-                style={`--d: ${Math.min(0.2 + s * 0.15 + i * 0.08, 0.9)}s; scroll-margin-top: calc(${s} * (2rem - 1px) + 2rem)`}
-              >
-                <span class="flex items-center gap-3 sm:gap-4">
-                  <span class="shrink-0 w-14 h-[35px] sm:w-[72px] sm:h-[45px] overflow-hidden rounded-sm ring-1 ring-line">
+          ))}
+          <span id="indicator" aria-hidden="true" class="absolute left-0 -bottom-px w-1/5 h-px bg-primary transition-transform duration-[400ms] ease-out-soft"></span>
+        </div>
+
+        <!-- Every panel sits in the same grid cell, so the card keeps the height of the tallest one and never jumps. -->
+        <div class="panels grid -mx-3">
+          {sections.map((section, s) => (
+            <div
+              role="tabpanel"
+              id={`panel-${section.dir}`}
+              aria-labelledby={`tab-${section.dir}`}
+              class:list={['panel col-start-1 row-start-1 flex flex-col', s === 0 && 'on']}
+            >
+              {section.items.map((project, i) => (
+                <a
+                  href={project.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="row group flex gap-3.5 items-start p-3 rounded-lg hover:bg-page"
+                  style={`--i: ${i}`}
+                >
+                  <span class="shrink-0 mt-0.5 w-14 h-[35px] overflow-hidden rounded ring-1 ring-line">
                     <img
                       src={project.thumb}
                       alt=""
-                      width="72"
-                      height="45"
-                      loading="lazy"
+                      width="56"
+                      height="35"
+                      loading={s === 0 ? 'eager' : 'lazy'}
                       decoding="async"
                       class="w-full h-full object-cover object-top saturate-[.55] opacity-90 transition duration-500 ease-out-soft group-hover:saturate-100 group-hover:opacity-100 group-hover:scale-105 dark:opacity-70 dark:group-hover:opacity-100"
                     />
                   </span>
-                  <span class="flex min-w-0 flex-1 flex-col gap-0.5 text-[0.9375rem]">
-                    <span class="flex items-center gap-1.5 transition-transform duration-300 ease-out-soft group-hover:translate-x-1">
+                  <span class="flex min-w-0 flex-1 flex-col gap-1">
+                    <span class="flex items-center gap-1.5 font-body text-[0.9375rem] font-medium">
                       {project.name}
-                      <svg class="opacity-0 -translate-x-1 transition-all duration-300 ease-out-soft group-hover:opacity-100 group-hover:translate-x-0 text-dim" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>
+                      <svg class="shrink-0 opacity-0 -translate-x-0.5 translate-y-0.5 transition duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-hover:translate-y-0 text-dim" xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg>
+                      <span class="ml-auto text-[0.65625rem] font-normal font-mono text-dim">{project.href.includes('github.com') ? 'source' : 'live'}</span>
                     </span>
-                    <span class="text-[0.7rem] text-dim tracking-wide leading-tight">{project.tag}</span>
+                    <span class="font-body text-[0.84375rem] leading-normal text-dim [text-wrap:pretty]">{project.desc}</span>
                   </span>
-                </span>
-                <span class="block font-body text-[0.84rem] leading-[1.65] text-dim transition-colors duration-300 group-hover:text-primary">
-                  {project.desc}
-                </span>
-              </a>
-            ))}
-          </Fragment>
-        ))}
-        <span data-tail aria-hidden="true" class="block"></span>
+                </a>
+              ))}
+            </div>
+          ))}
+        </div>
       </section>
     </div>
+
+    <p class="reveal text-[0.6875rem] text-dim" style="--d: 0.6s">© {year} Themos Koutsouris</p>
   </main>
 </Base>
 
@@ -253,50 +248,42 @@ const links = [
     opacity: 1;
     transform: none;
   }
-  /* Rows only show once they are fully in view, so none sits half-cut against a header.
-     The row itself only fades: scroll-snap measures transformed boxes, so the movement goes on its children. */
-  .revealed .reveal.out {
+
+  /* Only the open panel shows. Its rows rise in one after another: after the opening reveal on load, at once on a tab switch. */
+  .panels {
+    --d0: 0.55s;
+  }
+  .settled .panels {
+    --d0: 0s;
+  }
+  .panel {
+    visibility: hidden;
+  }
+  .panel.on {
+    visibility: visible;
+  }
+  .row {
     opacity: 0;
+    transform: translateY(4px);
+    transition: background-color 0.2s;
   }
-  [data-item] > * {
-    transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  .revealed .panel.on .row {
+    --delay: calc(var(--d0) + var(--i) * 50ms);
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1) var(--delay),
+      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1) var(--delay),
+      background-color 0.2s;
   }
-  .revealed .reveal.out > * {
-    transform: translateY(10px) scale(0.98);
-  }
-  /* After the opening stagger, rows pop in and out without waiting for it. */
-  .settled .reveal {
-    transition-delay: 0s;
-  }
+
   @media (prefers-reduced-motion: reduce) {
     .reveal,
-    .revealed .reveal.out,
-    .revealed .reveal.out > * {
+    .row,
+    .revealed .panel.on .row {
       transition: none;
       transform: none;
       opacity: 1;
-    }
-  }
-
-  /* Without the tilt, the browser snaps the list one row at a time. */
-  .projects.snap {
-    scroll-snap-type: y mandatory;
-  }
-  .projects.snap > [data-item] {
-    scroll-snap-align: start;
-  }
-
-  @media (min-width: 640px) {
-    .projects {
-      scrollbar-width: thin;
-      scrollbar-color: var(--border) transparent;
-    }
-    .projects::-webkit-scrollbar {
-      width: 4px;
-    }
-    .projects::-webkit-scrollbar-thumb {
-      background: var(--border);
-      border-radius: 2px;
     }
   }
 </style>
@@ -315,6 +302,7 @@ const links = [
   const text = 'themos.dev';
   const el = document.getElementById('title')!;
   const card = document.getElementById('card')!;
+  const main = card.parentElement!;
   let i = 0;
 
   function type() {
@@ -325,9 +313,9 @@ const links = [
   }
 
   function reveal() {
-    card.classList.add('revealed');
-    // The longest stagger is 0.9s plus a 0.7s transition; after that, rows pop without delay.
-    setTimeout(() => card.classList.add('settled'), 1700);
+    main.classList.add('revealed');
+    // The first rows finish rising by about 1.2s; after that, tab switches show rows without the opening delay.
+    setTimeout(() => main.classList.add('settled'), 1200);
   }
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -342,135 +330,35 @@ const links = [
     }, 500);
   }
 
-  // Sticky section headers: click to scroll to that section
-  const list = document.querySelector<HTMLElement>('.projects')!;
-  const heads = [...list.querySelectorAll<HTMLButtonElement>('[data-section]')];
-  const anchors = [...list.querySelectorAll<HTMLElement>('[data-anchor]')];
-  const tilts = !reduced && matchMedia('(hover: hover)').matches;
-  const listScrolls = () => getComputedStyle(list).overflowY !== 'visible';
+  // Tabs: click, or arrow keys, Home and End once a tab has focus
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+  const panels = [...document.querySelectorAll<HTMLElement>('[role="tabpanel"]')];
+  const indicator = document.getElementById('indicator')!;
 
-  // Under the 3D tilt, native list scrolling runs ahead of the sticky headers and rows peek out above them,
-  // so wheel and header scrolling set scrollTop from here instead.
-  let listTarget = 0, listPos = 0, listRaf = 0;
-
-  function glideList() {
-    listPos += (listTarget - listPos) * 0.18;
-    if (Math.abs(listTarget - listPos) < 0.5) listPos = listTarget;
-    list.scrollTop = listPos;
-    listRaf = listPos === listTarget ? 0 : requestAnimationFrame(glideList);
+  function select(n: number, focus = false) {
+    tabs.forEach((tab, j) => {
+      const on = j === n;
+      tab.setAttribute('aria-selected', String(on));
+      tab.tabIndex = on ? 0 : -1;
+      panels[j].classList.toggle('on', on);
+    });
+    indicator.style.transform = `translateX(${n * 100}%)`;
+    if (focus) tabs[n].focus();
   }
 
-  function scrollListTo(top: number) {
-    listTarget = Math.max(0, Math.min(list.scrollHeight - list.clientHeight, top));
-    if (!listRaf) {
-      listPos = list.scrollTop;
-      listRaf = requestAnimationFrame(glideList);
-    }
-  }
-
-  // Discrete scrolling: each wheel gesture moves the list by one row, lining it up under its section header.
-  const items = [...list.querySelectorAll<HTMLElement>('[data-item]')];
-  const headHeight = heads[0].offsetHeight;
-  const rowTop = (item: HTMLElement) => item.offsetTop - (+item.dataset.item! * (headHeight - 1) + headHeight);
-
-  // The furthest the list scrolls: the last header flush under the others (see sizeTail).
-  const tail = list.querySelector<HTMLElement>('[data-tail]')!;
-  let flushTop = Infinity;
-
-  function stepTarget(dir: number) {
-    const max = Math.min(list.scrollHeight - list.clientHeight, flushTop);
-    const from = listRaf ? listTarget : list.scrollTop;
-    const stops = [0, ...items.map(rowTop), max].map((t) => Math.max(0, Math.min(max, t)));
-    const next = dir > 0 ? Math.min(...stops.filter((t) => t > from + 2)) : Math.max(...stops.filter((t) => t < from - 2));
-    return Number.isFinite(next) ? next : null;
-  }
-
-  if (tilts) {
-    // Every mouse notch moves one row, however fast they come. Trackpads send small deltas,
-    // which add up so that each 60px of swipe moves one row.
-    const NOTCH = 40, TRACKPAD_ROW = 60;
-    let pending = 0, lastEvent = 0;
-    list.addEventListener('wheel', (e) => {
-      if (e.ctrlKey || !listScrolls() || !e.deltaY) return;
-      const delta = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? list.clientHeight : 1);
-      const dir = Math.sign(delta);
-      const next = stepTarget(dir);
-      if (next === null) return;
+  tabs.forEach((tab, j) => {
+    tab.addEventListener('click', () => select(j));
+    tab.addEventListener('keydown', (e) => {
+      const last = tabs.length - 1;
+      const keys: Record<string, number> = { ArrowRight: j === last ? 0 : j + 1, ArrowLeft: j === 0 ? last : j - 1, Home: 0, End: last };
+      if (!(e.key in keys)) return;
       e.preventDefault();
-      const now = performance.now();
-      if (now - lastEvent > 200 || Math.sign(pending) !== dir) pending = 0;
-      lastEvent = now;
-      if (Math.abs(delta) >= NOTCH) {
-        pending = 0;
-        scrollListTo(next);
-        return;
-      }
-      pending += delta;
-      if (Math.abs(pending) >= TRACKPAD_ROW) {
-        pending = 0;
-        scrollListTo(next);
-      }
-    }, { passive: false });
-  } else {
-    list.classList.add('snap');
-  }
-
-  // Rows pop in once they are fully in view: inside the list (or the window, when the page scrolls) and clear of every stuck header.
-  // Positions come from layout offsets, not rects, so reveal and pop-in transforms can't skew them.
-  // A stuck header's offsetTop already includes its sticky shift.
-  function updateRows() {
-    const rect = list.getBoundingClientRect();
-    const box = listScrolls() ? rect : { top: 0, bottom: innerHeight };
-    const origin = rect.top - list.scrollTop;
-    const covers = heads.map((h) => ({ top: origin + h.offsetTop, bottom: origin + h.offsetTop + h.offsetHeight }));
-    for (const item of items) {
-      const top = origin + item.offsetTop;
-      const bottom = top + item.offsetHeight;
-      const inside = top >= box.top - 2 && bottom <= box.bottom + 2;
-      const covered = covers.some((c) => c.top < bottom - 2 && c.bottom > top + 2);
-      item.classList.toggle('out', !inside || covered);
-    }
-  }
-
-  let rowsRaf = 0;
-  const queueRows = () => { if (!rowsRaf) rowsRaf = requestAnimationFrame(() => { rowsRaf = 0; updateRows(); }); };
-  list.addEventListener('scroll', queueRows, { passive: true });
-  addEventListener('scroll', queueRows, { passive: true });
-  addEventListener('resize', queueRows);
-
-  // Room after the last row, so the list can scroll until the last header sits flush under the stacked ones.
-  // The content's end comes from the tail's offset: scrollHeight also counts rows shifted by their pop-in transform.
-  function sizeTail() {
-    if (!listScrolls()) {
-      tail.style.height = '0px';
-      return;
-    }
-    const last = anchors.length - 1;
-    flushTop = anchors[last].offsetTop + anchors[last].offsetHeight - last * (headHeight - 1);
-    tail.style.height = `${Math.max(0, flushTop + list.clientHeight - tail.offsetTop)}px`;
-  }
-  sizeTail();
-  addEventListener('resize', sizeTail);
-  document.fonts.ready.then(sizeTail);
-  updateRows();
-
-  heads.forEach((head, j) =>
-    head.addEventListener('click', () => {
-      const behavior = reduced ? 'auto' : 'smooth';
-      const stacked = j * (head.offsetHeight - 1);
-      if (listScrolls()) {
-        const top = anchors[j].offsetTop + anchors[j].offsetHeight - stacked;
-        if (tilts) scrollListTo(top);
-        else list.scrollTo({ top: Math.min(top, list.scrollHeight - list.clientHeight), behavior });
-      } else {
-        const top = scrollY + anchors[j].getBoundingClientRect().bottom - stacked;
-        scrollTo({ top: Math.min(top, document.documentElement.scrollHeight - innerHeight), behavior });
-      }
-    })
-  );
+      select(keys[e.key], true);
+    });
+  });
 
   // Parallax tilt on the card (pointer devices, full motion only)
-  if (tilts) {
+  if (!reduced && matchMedia('(hover: hover)').matches) {
     let tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
 
     function damp() {
