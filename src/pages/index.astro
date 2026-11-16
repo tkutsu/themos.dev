@@ -208,7 +208,7 @@ const links = [
                   class="row group flex gap-3.5 items-start p-3 rounded-lg hover:bg-page"
                   style={`--i: ${i}`}
                 >
-                  <span class="thumb shrink-0 mt-0.5 w-14 h-[35px] overflow-hidden rounded ring-1 ring-line">
+                  <span class="shrink-0 mt-0.5 w-14 h-[35px] overflow-hidden rounded ring-1 ring-line">
                     <img
                       src={project.thumb}
                       alt=""
@@ -323,34 +323,7 @@ const links = [
       background-color 0.2s;
   }
 
-  /* Thumbnails switch on like old monitors: a bright line opens into the picture, then it flickers like a bulb catching and settles.
-     The last keyframes are left out, so each one eases back to the image's own resting opacity, filter and transform. */
-  .revealed .panel.on .thumb {
-    animation: flicker 0.9s linear calc(var(--delay) + 0.1s) backwards;
-  }
-  .revealed .panel.on .thumb img {
-    animation: crt 0.35s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--delay) + 0.1s) backwards;
-  }
-  @keyframes flicker {
-    0% { opacity: 0; }
-    8% { opacity: 1; filter: brightness(2); }
-    14% { opacity: 0.15; }
-    22% { opacity: 0.85; filter: brightness(1.5); }
-    27% { opacity: 0.3; }
-    40% { opacity: 1; filter: brightness(1.3); }
-    47% { opacity: 0.6; }
-    60% { opacity: 1; filter: brightness(1.1); }
-  }
-  @keyframes crt {
-    0%,
-    30% { transform: scaleY(0.04); }
-  }
-
   @media (prefers-reduced-motion: reduce) {
-    .thumb,
-    .thumb img {
-      animation: none !important;
-    }
     .socials :global(svg *) {
       transition: none !important;
       visibility: visible;
