@@ -208,7 +208,7 @@ const links = [
                   class="row group flex gap-3.5 items-start p-3 rounded-lg hover:bg-page"
                   style={`--i: ${i}`}
                 >
-                  <span class="shrink-0 mt-0.5 w-14 h-[35px] overflow-hidden rounded ring-1 ring-line">
+                  <span class="thumb shrink-0 mt-0.5 w-14 h-[35px] overflow-hidden rounded ring-1 ring-line">
                     <img
                       src={project.thumb}
                       alt=""
@@ -323,10 +323,10 @@ const links = [
       background-color 0.2s;
   }
 
-  /* Each thumbnail rises softly and fades in a beat after its row. An animation, not a transition, so it leaves the
-     image's hover transition alone and replays whenever its panel opens; with no end keyframe it settles on the
-     image's own resting opacity and transform. */
-  .revealed .panel.on .row img {
+  /* Each thumbnail, frame and all, rises softly and fades in a beat after its row. It animates the frame rather than
+     the image, so the outline comes in with the picture and the image's own opacity and hover zoom are untouched;
+     it replays whenever its panel opens. */
+  .revealed .panel.on .thumb {
     animation: settle 0.7s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--delay) + 80ms) backwards;
   }
   @keyframes settle {
@@ -337,7 +337,7 @@ const links = [
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .revealed .panel.on .row img {
+    .revealed .panel.on .thumb {
       animation: none;
     }
     .socials :global(svg *) {
