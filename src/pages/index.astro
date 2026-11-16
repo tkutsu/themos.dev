@@ -8,19 +8,19 @@ const sections = [
     dir: 'tools',
     items: [
       {
-        name: 'wayhint',
+        name: 'Wayhint',
         href: 'https://github.com/tkutsu/wayhint',
         thumb: '/thumbs/wayhint.svg',
         desc: 'Keyboard-driven clicking for Hyprland: hint labels and text search',
       },
       {
-        name: 'dewdrop',
+        name: 'Dewdrop',
         href: 'https://github.com/tkutsu/dewdrop',
         thumb: '/thumbs/dewdrop.svg',
         desc: 'Liquid glass shell for Hyprland: bar, launcher, notifications, music, timers, phone alarms, weather, feeds, mail, calendar, tasks etc',
       },
       {
-        name: 'mousewand',
+        name: 'Mousewand',
         href: 'https://github.com/tkutsu/mousewand',
         thumb: '/thumbs/mousewand.svg',
         desc: 'Mouse gestures for every Linux desktop: hold a button, draw a stroke, the window under it acts.',
@@ -88,19 +88,19 @@ const sections = [
     dir: 'datavis',
     items: [
       {
-        name: 'EU beaches',
+        name: 'EU Beaches',
         href: 'https://beaches.themos.dev',
         thumb: '/thumbs/beaches.svg',
         desc: 'Finding the perfect beach among 26,199 bathing waters rated back to 1990, with sea temperature, waves and amenities for each.',
       },
       {
-        name: 'EU bird radar',
+        name: 'EU Bird Radar',
         href: 'https://birds.themos.dev',
         thumb: '/thumbs/birds.svg',
         desc: 'The flight paths of birds migrating over Europe at night, drawn from weather radar. Fun to watch.',
       },
       {
-        name: 'GR wildfires',
+        name: 'GR Wildfires',
         href: 'https://wildfires.themos.dev',
         thumb: '/thumbs/wildfires.svg',
         desc: 'A live map of fires in Greece: what is burning today, what the season has taken, and the fire danger for tomorrow.',
@@ -168,8 +168,9 @@ const links = [
       </header>
 
       <!-- projects, one tab per section -->
-      <section class="reveal flex flex-col gap-1.5" style="--d: 0.4s">
-        <div role="tablist" aria-label="Projects" class="relative grid grid-cols-5 border-b border-line">
+      <section class="flex flex-col gap-1.5">
+        <!-- Clipped, so on load each tab rises out of the line as the line draws past it. -->
+        <div role="tablist" aria-label="Projects" class="relative grid grid-cols-5 pb-px overflow-hidden">
           {sections.map((section, s) => (
             <button
               type="button"
@@ -178,12 +179,15 @@ const links = [
               aria-controls={`panel-${section.dir}`}
               aria-selected={s === 0 ? 'true' : 'false'}
               tabindex={s === 0 ? 0 : -1}
-              class="h-11 rounded-md text-[0.75rem] text-dim cursor-pointer outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-dim transition-colors duration-200 hover:text-primary aria-selected:text-primary"
+              class="tab h-11 rounded-md text-[0.75rem] text-dim cursor-pointer outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-dim hover:text-primary aria-selected:text-primary"
+              style={`--i: ${s}`}
             >
               {section.dir}<sup class="ml-0.5 text-[0.5625rem] opacity-70 max-[359px]:hidden">{section.items.length}</sup>
             </button>
           ))}
-          <span id="indicator" aria-hidden="true" class="absolute left-0 -bottom-px w-1/5 h-px bg-primary transition-transform duration-[400ms] ease-out-soft"></span>
+          <span id="rule" aria-hidden="true" class="absolute inset-x-0 bottom-0 h-px bg-line">
+            <span id="indicator" class="absolute left-0 top-0 w-1/5 h-px bg-primary transition-transform duration-[400ms] ease-out-soft"></span>
+          </span>
         </div>
 
         <!-- Every panel sits in the same grid cell, so the card keeps the height of the tallest one and never jumps. -->
@@ -251,9 +255,30 @@ const links = [
     transform: none;
   }
 
+  /* The tab line draws left to right, the active indicator riding along with it. */
+  #rule {
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1) 0.4s;
+  }
+  .revealed #rule {
+    transform: none;
+  }
+
+  /* Each tab rises out of the line once the line reaches its centre. */
+  .tab {
+    transform: translateY(100%);
+    transition:
+      color 0.2s,
+      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) calc(0.55s + var(--i) * 70ms);
+  }
+  .revealed .tab {
+    transform: none;
+  }
+
   /* Only the open panel shows. Its rows rise in one after another: after the opening reveal on load, at once on a tab switch. */
   .panels {
-    --d0: 0.55s;
+    --d0: 0.8s;
   }
   .settled .panels {
     --d0: 0s;
@@ -282,7 +307,9 @@ const links = [
   @media (prefers-reduced-motion: reduce) {
     .reveal,
     .row,
-    .revealed .panel.on .row {
+    .revealed .panel.on .row,
+    #rule,
+    .tab {
       transition: none;
       transform: none;
       opacity: 1;
@@ -316,8 +343,8 @@ const links = [
 
   function reveal() {
     main.classList.add('revealed');
-    // The first rows finish rising by about 1.2s; after that, tab switches show rows without the opening delay.
-    setTimeout(() => main.classList.add('settled'), 1200);
+    // The first rows finish rising by about 1.3s; after that, tab switches show rows without the opening delay.
+    setTimeout(() => main.classList.add('settled'), 1300);
   }
 
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
