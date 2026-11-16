@@ -45,7 +45,7 @@ const sections = [
     ],
   },
   {
-    dir: 'work',
+    dir: 'clients',
     items: [
       {
         name: 'summit.gr',
@@ -113,17 +113,17 @@ const links = [
     {
       label: 'Email',
       href: 'mailto:me@themos.dev',
-      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>',
+      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M2 7l8.97 5.7a1.94 1.94 0 0 0 2.06 0L22 7v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v1"/></svg>',
     },
     {
       label: 'GitHub',
       href: 'https://github.com/tkutsu',
-      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>',
+      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M16 22v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22V19c-5 1.5-5-2.5-7-3"/></svg>',
     },
     {
       label: 'LinkedIn',
       href: 'https://www.linkedin.com/in/themos-koutsouris-63b0a6395',
-      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>',
+      icon: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect pathLength="1" style="--for: 0.28s; --ease: ease-in" x="2" y="9" width="4" height="12"/><circle pathLength="1" style="--at: 0.28s; --for: 0.11s; --ease: linear" cx="4" cy="4" r="2"/><path pathLength="1" style="--at: 0.39s; --for: 0.51s; --ease: ease-out" d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/></svg>',
     },
   ];
 ---
@@ -150,14 +150,15 @@ const links = [
             <span id="title">themos.dev</span>
             <span aria-hidden="true" class="inline-block w-[0.55em] h-[1.15em] bg-cursor align-text-bottom ml-px animate-blink transition-colors duration-300"></span>
           </h1>
-          <nav aria-label="Contact" class="reveal flex -mr-2.5" style="--d: 0.5s">
-            {links.map((link) => (
+          <nav aria-label="Contact" class="socials flex -mr-2.5">
+            {links.map((link, i) => (
               <a
                 href={link.href}
                 target={link.href.startsWith('mailto') ? undefined : '_blank'}
                 rel={link.href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
                 class="w-10 h-10 flex items-center justify-center text-dim transition-colors duration-200 hover:text-primary"
                 aria-label={link.label}
+                style={`--i: ${i}`}
               >
                 <Fragment set:html={link.icon} />
               </a>
@@ -207,7 +208,7 @@ const links = [
                   class="row group flex gap-3.5 items-start p-3 rounded-lg hover:bg-page"
                   style={`--i: ${i}`}
                 >
-                  <span class="shrink-0 mt-0.5 w-14 h-[35px] overflow-hidden rounded ring-1 ring-line">
+                  <span class="thumb shrink-0 mt-0.5 w-14 h-[35px] overflow-hidden rounded ring-1 ring-line">
                     <img
                       src={project.thumb}
                       alt=""
@@ -253,6 +254,24 @@ const links = [
   .revealed .reveal {
     opacity: 1;
     transform: none;
+  }
+
+  /* Each contact icon draws itself as one line. pathLength="1" lets a single dash cover any shape; Email and GitHub
+     are one continuous path, and LinkedIn's pieces (which never touch) set --at/--for so they draw one after another
+     at the same pen speed. Shapes stay hidden until their turn, so round caps leave no dot waiting at the start.
+     The icons arrive through set:html, so their shapes need :global. */
+  .socials :global(svg *) {
+    visibility: hidden;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  .revealed .socials :global(svg *) {
+    --start: calc(0.5s + var(--i) * 120ms + var(--at, 0s));
+    visibility: visible;
+    stroke-dashoffset: 0;
+    transition:
+      visibility 0s var(--start),
+      stroke-dashoffset var(--for, 0.9s) var(--ease, cubic-bezier(0.65, 0, 0.35, 1)) var(--start);
   }
 
   /* The tab line draws left to right, the active indicator riding along with it. */
@@ -304,7 +323,39 @@ const links = [
       background-color 0.2s;
   }
 
+  /* Thumbnails switch on like old monitors: a bright line opens into the picture, then it flickers like a bulb catching and settles.
+     The last keyframes are left out, so each one eases back to the image's own resting opacity, filter and transform. */
+  .revealed .panel.on .thumb {
+    animation: flicker 0.9s linear calc(var(--delay) + 0.1s) backwards;
+  }
+  .revealed .panel.on .thumb img {
+    animation: crt 0.35s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--delay) + 0.1s) backwards;
+  }
+  @keyframes flicker {
+    0% { opacity: 0; }
+    8% { opacity: 1; filter: brightness(2); }
+    14% { opacity: 0.15; }
+    22% { opacity: 0.85; filter: brightness(1.5); }
+    27% { opacity: 0.3; }
+    40% { opacity: 1; filter: brightness(1.3); }
+    47% { opacity: 0.6; }
+    60% { opacity: 1; filter: brightness(1.1); }
+  }
+  @keyframes crt {
+    0%,
+    30% { transform: scaleY(0.04); }
+  }
+
   @media (prefers-reduced-motion: reduce) {
+    .thumb,
+    .thumb img {
+      animation: none !important;
+    }
+    .socials :global(svg *) {
+      transition: none !important;
+      visibility: visible;
+      stroke-dashoffset: 0;
+    }
     .reveal,
     .row,
     .revealed .panel.on .row,
